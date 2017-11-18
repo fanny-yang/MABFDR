@@ -1,3 +1,6 @@
+# MABFDR
+Code for the MAB-FDR framework introduced in "A framework for Multi-A(rmed)/B(andit) Testing with Online FDR Control", NIPS 2017  arXiv preprint available at https://arxiv.org/abs/1706.05378
+
 --------------- For reconstructing the plots ------------------------
 
 0. pip install sortedcontainers
@@ -28,6 +31,7 @@ Plots in the paper are found in plots/BDRvsTT_D0_MS0.... and plots/SPSvsNA_D0_MS
 python main_onlocal.py --dist-style 1 --power-plot 0
 python plot_main.py --dist-style 1 --power-plot 0
 
+Plots in the paper are found in plots/FDPvsHYP... and plots/mFDRvsPi...
 
 
 ----------------- Brief overview over code structure -------------------- 
@@ -72,22 +76,24 @@ Different ways you can simulate how true nulls and alternatives are distributed
 4: many alt at beginning - step up
 
 FDRrange (online FDR procedure)
-0: LORD++ ( see paper ... )
+0: LORD++ ( we use the ++ version, described in the paper "Online control of the false discovery rate with decaying memory" available at https://arxiv.org/abs/1710.00499, for the LORD procedure described in our paper )
 1: LORD
 3: no FDR, plain alpha
-4: alpha invest
+4: alpha invest (Foster & Stine '07 )
 5: Bonferroni
 
 proc_list (MAB combined with different online multiple testing procedures)
-0: MAB-LORD
-3: MAB-IND
-5: MAB-Bonf
+0: MAB-LORD (corrected with LORD++)
+3: MAB-IND (uncorrected)
+5: MAB-Bonf 
 
 alg_list ( sampling procedure per experiment )
-0: LUCB best-arm MAB algorithm ( see paper ... )
+0: LUCB best-arm MAB algorithm ( Kalyanakrishnan et al. '12 )
 1: Uniform sampling
 
-Notes: 
+------------------------- Some notes ---------------------------
+- If you run the code on your local computer, you may comment out the lines in import section of the plotting related code containing 'agg'
 - Although AlphaInvest was implemented, it is not plotted in the graphs
 - Epsilon-modified LUCB is not currently implemented
 - The number of runs that are averaged over are aggregated. Thus, if you run the exp multiple times, you'll average over more samples
+- For parallelization (of the e.g. New Yorker experiments) you may write a wrapper and use ipyparallel
